@@ -1,40 +1,20 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import {
-  Alert,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Image,
+    Modal,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-// IMPORT YOUR MODAL COMPONENT
-import CoffeeModal from "../components/CoffeeModal";
-
 export default function JobDetails() {
   const { id } = useLocalSearchParams();
-  const router = useRouter();
-
-  const [coffeeModalVisible, setCoffeeModalVisible] = useState(false);
-
-  // ---------------- APPLY HANDLER ----------------
-  const handleApply = () => {
-    Alert.alert("Success", "Application submitted successfully!", [
-      {
-        text: "OK",
-        onPress: () => router.push("/"), // go back to index
-      },
-    ]);
-  };
-
-  // ---------------- FAVORITE HANDLER ----------------
-  const handleFavorite = () => {
-    Alert.alert("Favorite", "Added to favorite ✓");
-  };
+  const [coffeeModalVisible, setCoffeeModalVisible] = useState(false); // modal state
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -49,18 +29,17 @@ export default function JobDetails() {
         </View>
 
         <View style={styles.headerIcons}>
-          {/* Coffee icon → opens imported modal */}
+          {/* Coffee icon */}
           <TouchableOpacity onPress={() => setCoffeeModalVisible(true)}>
             <Ionicons
-              name="cafe-outline"
+              name="cafe-outline" // coffee icon
               size={26}
               color="#000"
               style={{ marginRight: 18 }}
             />
           </TouchableOpacity>
 
-          {/* Heart icon → show Added to favorite */}
-          <TouchableOpacity onPress={handleFavorite}>
+          <TouchableOpacity>
             <Ionicons name="heart-outline" size={26} color="#000" />
           </TouchableOpacity>
         </View>
@@ -78,44 +57,70 @@ export default function JobDetails() {
         {/* ABOUT US */}
         <Text style={styles.sectionTitle}>About Us</Text>
         <Text style={styles.bodyText}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras risus velit, porttitor in quam vitae, congue congue sapien. Praesent eget velit condimentum, viverra purus ut, commodo diam. Maecenas in varius massa. Aenean molestie consectetur ante elementum faucibus. Nunc aliquet egestas justo id hendrerit. Sed enim ante, eleifend at sem vel, laoreet luctus leo. Donec ut lectus et neque scelerisque pharetra. Phasellus volutpat sapien ac sagittis pharetra. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras risus
+          velit, porttitor in quam vitae, congue congue sapien...
         </Text>
 
         {/* WHAT YOU'LL DO */}
         <Text style={styles.sectionTitle}>What you'll do</Text>
         <Text style={styles.bodyText}>
-          Donec pharetra ipsum vel enim luctus feugiat. Etiam efficitur consectetur orci, in tempus magna suscipit non.
+          Donec pharetra ipsum vel enim luctus feugiat. Etiam efficitur
+          consectetur orci, in tempus magna suscipit non.
         </Text>
 
         {/* WHAT WE OFFER */}
         <Text style={styles.sectionTitle}>What we offer</Text>
         <Text style={styles.bodyText}>
-          Maecenas in varius massa. Aenean molestie consectetur ante elementum faucibus. Nunc aliquet egestas justo id hendrerit. Sed enim ante, eleifend at sem vel, laoreet luctus leo. Donec ut lectus et neque scelerisque pharetra. Phasellus volutpat sapien ac sagittis pharetra. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+          Maecenas in varius massa. Aenean molestie consectetur ante elementum
+          faucibus...
         </Text>
 
         {/* JOB DESCRIPTION */}
         <Text style={styles.sectionTitle}>Job description</Text>
         <Text style={styles.bodyText}>
-          Sed eu leo malesuada, dignissim eros at, ultricies quam. Morbi fringilla felis ligula, ac tincidunt odio facilisis sed. Cras faucibus ligula in quam mattis feugiat. Nunc eros nisi, euismod vel ullamcorper nec, dictum ac sapien. Nulla tincidunt leo nec nisi blandit aliquam. Vestibulum dictum purus faucibus dui aliquam porta. In venenatis et tellus in condimentum. Etiam magna massa, tincidunt non vulputate vitae, semper at nunc. Nullam et tempor lectus, quis egestas turpis.
+          Sed eu leo malesuada, dignissim eros at, ultricies quam...
+        </Text>
+
+        {/* WHAT WE OFFER AGAIN */}
+        <Text style={styles.sectionTitle}>What we offer</Text>
+        <Text style={styles.bodyText}>
+          Nulla tincidunt leo nec nisi blandit aliquam...
         </Text>
       </ScrollView>
 
       {/* ---------------- BOTTOM APPLY BAR ---------------- */}
       <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.applyBtn} onPress={handleApply}>
+        <TouchableOpacity style={styles.applyBtn}>
           <Text style={styles.applyText}>Apply</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.favBtn} onPress={handleFavorite}>
+        <TouchableOpacity style={styles.favBtn}>
           <Ionicons name="heart-outline" size={28} color="#000" />
         </TouchableOpacity>
       </View>
 
-      {/* ---------------- IMPORTED COFFEE MODAL ---------------- */}
-      <CoffeeModal
+      {/* ---------------- COFFEE MODAL ---------------- */}
+      <Modal
+        animationType="slide"
+        transparent={true}
         visible={coffeeModalVisible}
-        onClose={() => setCoffeeModalVisible(false)}
-      />
+        onRequestClose={() => setCoffeeModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Coffee Break ☕</Text>
+            <Text style={styles.modalBody}>
+              Take a short coffee break! Relax, recharge, and get back to work.
+            </Text>
+            <TouchableOpacity
+              style={styles.modalCloseBtn}
+              onPress={() => setCoffeeModalVisible(false)}
+            >
+              <Text style={styles.modalCloseText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -131,11 +136,24 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 6,
   },
-  logoRow: { flexDirection: "row", alignItems: "center" },
-  logoImage: { width: 28, height: 28, resizeMode: "contain" },
-  logoText: { fontSize: 18, fontWeight: "700", marginLeft: 6 },
-  headerIcons: { flexDirection: "row", marginLeft: "auto" },
-
+  logoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  logoImage: {
+    width: 28,
+    height: 28,
+    resizeMode: "contain",
+  },
+  logoText: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginLeft: 6,
+  },
+  headerIcons: {
+    flexDirection: "row",
+    marginLeft: "auto",
+  },
   title: {
     fontSize: 28,
     fontWeight: "700",
@@ -145,14 +163,8 @@ const styles = StyleSheet.create({
   },
   location: { color: "#333", fontSize: 15, marginBottom: 2 },
   timeAgo: { color: "#777", fontSize: 14, marginBottom: 25 },
-  sectionTitle: {
-    fontWeight: "700",
-    fontSize: 16,
-    marginTop: 25,
-    marginBottom: 10,
-  },
+  sectionTitle: { fontWeight: "700", fontSize: 16, marginTop: 25, marginBottom: 10 },
   bodyText: { color: "#444", lineHeight: 20, fontSize: 14 },
-
   bottomBar: {
     position: "absolute",
     bottom: 0,
@@ -168,13 +180,13 @@ const styles = StyleSheet.create({
   },
   applyBtn: {
     flex: 1,
-    backgroundColor: "#0D47A1",
+    backgroundColor: "#003d99",
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",
+    justifyContent: "center",
   },
   applyText: { color: "#fff", fontSize: 16, fontWeight: "600" },
-
   favBtn: {
     marginLeft: 14,
     backgroundColor: "#fff",
@@ -182,5 +194,30 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#ccc",
+    justifyContent: "center",
+    alignItems: "center",
   },
+  /* Modal styles */
+  modalBackground: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    width: "80%",
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 20,
+    alignItems: "center",
+  },
+  modalTitle: { fontSize: 20, fontWeight: "700", marginBottom: 12 },
+  modalBody: { fontSize: 16, color: "#444", textAlign: "center", marginBottom: 20 },
+  modalCloseBtn: {
+    backgroundColor: "#003d99",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  modalCloseText: { color: "#fff", fontWeight: "600", fontSize: 16 },
 });

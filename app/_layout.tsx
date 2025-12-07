@@ -1,26 +1,42 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import React from 'react';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+// -----------------------------------------------------------------------------
+// INNER LAYOUT - This consumes ThemeContext and applies theme to Navigation
+// -----------------------------------------------------------------------------
+function InnerLayout() {
+  const { theme } = useTheme(); // light | dark
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <NavigationThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="apply" options={{ headerShown: false }} />
-        {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
+        <Stack.Screen name="homeScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="jobdetails" options={{ headerShown: false }} />
+        <Stack.Screen name="savedjobs" options={{ headerShown: false }} />
+        <Stack.Screen name="notifications" options={{ headerShown: false }} />
+        <Stack.Screen name="settings" options={{ headerShown: false }} /> 
+        <Stack.Screen name="buymecoffee" options={{ headerShown: false }} /> 
+        
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
-      <StatusBar style="auto" />
+      <StatusBar style={theme === "dark" ? "light" : "dark"} />
+    </NavigationThemeProvider>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// ROOT LAYOUT - Wraps everything with ThemeProvider
+// -----------------------------------------------------------------------------
+export default function RootLayout() {
+  return (
+    <ThemeProvider>
+      <InnerLayout />
     </ThemeProvider>
   );
 }
